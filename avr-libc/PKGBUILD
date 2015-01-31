@@ -1,0 +1,42 @@
+# $Id: PKGBUILD 117819 2014-08-23 15:48:15Z anatolik $
+# Contributor: Corrado Primier <bardo@aur.archlinux.org>
+# Contributor: danst0 <danst0@west.de>
+
+# Build order: avr-binutils -> avr-gcc -> avr-libc
+
+pkgname=avr-libc
+pkgver=1.8.1
+pkgrel=1
+pkgdesc="The C runtime library for the AVR family of microcontrollers"
+arch=('any')
+url="http://savannah.nongnu.org/projects/avr-libc/"
+license=('BSD')
+depends=('avr-gcc')
+options=('staticlibs' '!strip')
+source=(http://download.savannah.gnu.org/releases/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig}
+        tiny441-tiny841.patch)
+md5sums=('0caccead59eaaa61ac3f060ca3a803ef'
+         'SKIP'
+         '62347326c111aa0d2f42160328c1b55c')
+
+prepare() {
+    cd ${srcdir}/avr-libc-${pkgver}
+
+    # Adds support for ATTiny441 and ATTiny841
+    patch -p1 -i $srcdir/tiny441-tiny841.patch
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --build=$(./config.guess) --host=avr --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

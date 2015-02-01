@@ -14,6 +14,12 @@ This patch modifies configuration of the avr-libc, adds startup code and a heade
 
 This patch is intended for avr-libc version 1.8.1
 
+## avrdude-config
+
+Not exactly an AVR Toolchain patch, but this config file adds support for these MCUs to the avrdude (AVR Downloader/UploaDEr) tool which is often used for flashing the firmware.
+
+Append it to your `~/.avrduderc`.
+
 ## Building
 
 Download appropriate versions of avr-gcc (4.9.2) and avr-libc (1.8.1), patch them and then just follow instructions in the packages.
